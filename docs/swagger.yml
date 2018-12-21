@@ -1,0 +1,196 @@
+swagger: "2.0"
+info:
+  description: "Persistent RESTful API for a “TODO” application"
+  version: "1.0.0"
+  title: "ToDos RESTful API"
+  termsOfService: ""
+  contact:
+    email: "gutmox@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+basePath: "/v1"
+tags:
+- name: "User authentication"
+  description: "User authentication methods"
+- name: "todo"
+  description: "Operations to manage todos"
+schemes:
+- "http"
+paths:
+  /todos:
+    post:
+      tags:
+      - "todo"
+      summary: "New todo"
+      description: "This can only be done by the logged in user."
+      operationId: "newTodo"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Todo Item Created"
+        required: true
+        schema:
+          $ref: "#/definitions/Todo"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TodoWithIdentifier"
+        400:
+          description: "title and description are mandatory"
+  /todos/{todoIdentifier}:
+    get:
+      tags:
+      - "todo"
+      summary: "Get todo item by identifier"
+      description: ""
+      operationId: "getAccountById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "todoIdentifier"
+        in: "path"
+        description: "The todo id that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Todo"
+        400:
+          description: "Invalid todo id supplied"
+        404:
+          description: "Todo not found"
+    delete:
+      tags:
+      - "todo"
+      summary: "Delete todo item"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteTodoItem"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "todoIdentifier"
+        in: "path"
+        description: "The id that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid todo id supplied"
+        404:
+          description: "Todo item not found"
+    put:
+      tags:
+      - "todo"
+      summary: "New todo"
+      description: "This can only be done by the logged in user."
+      operationId: "updateTodoItem"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "todoIdentifier"
+        in: "path"
+        description: "The todo id that needs to be updated."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Todo Item Created"
+        required: true
+        schema:
+          $ref: "#/definitions/Todo"
+      responses:
+        default:
+          description: "successful operation"
+  /auth/login:
+    post:
+      tags:
+      - "User authentication"
+      summary: "User login: it returns a jwt token needed for request todo endpoints"
+      operationId: "login"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "login details"
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Jwt"
+  /auth/logout:
+    get:
+      tags:
+      - "User authentication"
+      summary: "User logout"
+      operationId: "logout"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Jwt"
+  /auth/signup:
+    post:
+      tags:
+      - "User authentication"
+      summary: "User sign up"
+      operationId: "signup"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "login details"
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Jwt"
+definitions:
+  TodoWithIdentifier:
+    type: "object"
+    properties:
+      identifier:
+        type: "string"
+      title:
+        type: "string"
+      description:
+        type: "number"
+      priority:
+        type: "string"
+  Todo:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+      description:
+        type: "number"
+      priority:
+        type: "string"
+  Login:
+    type: "object"
+    properties:
+      userName:
+        type: "string"
+      password:
+        type: "string"
+  Jwt:
+    type: "object"
+    properties:
+      jwtToken:
+        type: "string"

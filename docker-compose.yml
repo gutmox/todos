@@ -1,0 +1,13 @@
+version: "2"
+services:
+  mongodata:
+    image: mongo:3.3
+    volumes:
+      - /data/db
+    command: --break-mongo
+  mongo:
+    image: mongo:3.3
+    volumes_from:
+      - mongodata
+    ports:
+      - "27017:27017"

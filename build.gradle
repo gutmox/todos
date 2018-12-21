@@ -1,0 +1,88 @@
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'jacoco'
+    id "org.sonarqube" version "2.6"
+}
+
+group 'com.gutmox.todos'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    vertxVersion   = '3.6.2'
+    assertjVersion = '3.8.0'
+    mockitoVersion = '2.20.1'
+    junitVersion   = '4.12'
+    guiceVersion   = '4.2.0'
+    injectVersion   = '1'
+    jbcryptVersion   = '0.4'
+    commonsioVersion   = '2.6'
+}
+
+dependencies {
+    compile "javax.inject:javax.inject:$injectVersion"
+    compile "io.vertx:vertx-core:$vertxVersion"
+    compile "io.vertx:vertx-web:$vertxVersion"
+    compile "io.vertx:vertx-auth-jwt:${vertxVersion}"
+    compile "io.vertx:vertx-rx-java:$vertxVersion"
+    compile "io.vertx:vertx-mongo-client:$vertxVersion"
+    compile "com.google.inject:guice:$guiceVersion"
+    compile "org.mindrot:jbcrypt:$jbcryptVersion"
+    compile "commons-io:commons-io:$commonsioVersion"
+    testCompile "io.vertx:vertx-unit:$vertxVersion"
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.assertj:assertj-core:$assertjVersion"
+    testCompile "org.mockito:mockito-core:$mockitoVersion"
+}
+
+mainClassName = 'com.gutmox.todos.Runner'
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+        testLogging.showStandardStreams = true
+        testLogging.exceptionFormat = 'full'
+    }
+}
+
+jacoco{
+    toolVersion = "0.8.1"
+}
+
+jacocoTestReport {
+    reports {
+        csv.enabled true
+    }
+}
+
+sonarqube {
+    properties {
+        property 'sonar.organization', System.getenv('SONAR_ORG')
+        property 'sonar.host.url', System.getenv('SONAR_URL')
+        property 'sonar.login', System.getenv('SONAR_LOGIN')
+    }
+}
+
+task execMongo(type: Exec) {
+    commandLine 'sh', './mongo-start.sh'
+}
+
+task stopMongo(type: Exec) {
+    commandLine 'sh', './mongo-start.sh'
+}
+
+test {
+    if (System.properties['test.profile'] != 'integration') {
+        exclude 'integration*'
+    } else {
+        exclude 'com/*'
+    }
+}
+
