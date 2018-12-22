@@ -8,8 +8,8 @@ before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./gradlew
 
-unit-testing:
-  stage: unit-testing
+unit-tests:
+  stage: unit-tests
   script: ./gradlew clean test
 
 integration-testing:
