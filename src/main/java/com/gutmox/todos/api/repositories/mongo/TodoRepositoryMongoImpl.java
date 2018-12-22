@@ -57,9 +57,8 @@ public class TodoRepositoryMongoImpl implements TodoRepository{
 
         LOGGER.info(this.todoIdentifier  + " :  " + todoIdentifier);
 
-        Single<JsonObject> jsonObjectSingle = mongoClient.rxFindOneAndReplace(collection, new JsonObject().put(mongoIdentifier, todoIdentifier), todo);
+        return mongoClient.rxFindOneAndReplace(collection, new JsonObject().put(mongoIdentifier, todoIdentifier), todo);
 
-        return jsonObjectSingle;
     }
 
     public Single<Long> remove(String todoIdentifier) {
