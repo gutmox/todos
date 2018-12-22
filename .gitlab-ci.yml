@@ -12,8 +12,8 @@ unit-tests:
   stage: unit-tests
   script: ./gradlew clean test
 
-integration-testing:
-  stage: integration-testing
+integration-tests:
+  stage: integration-tests
   script: ./gradlew clean execMongo test stopMongo -Dtest.profile=integration
 
 build:
