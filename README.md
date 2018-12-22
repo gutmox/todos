@@ -171,7 +171,7 @@ curl -X GET \
 ### To build:
 
 ```
-    docker build -t todos 
+    docker build -t todos . 
  ```
 ### To run:
 

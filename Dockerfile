@@ -12,7 +12,7 @@
 
 FROM java:8-jre
 
-ENV DIST_FILE build/distributions/todos.tar
+ENV DIST_FILE build/distributions/todos-1.0-SNAPSHOT.tar
 
 # Set the location of the verticles
 ENV VERTICLE_HOME /opt/verticles
@@ -23,7 +23,7 @@ COPY $DIST_FILE $VERTICLE_HOME/
 
 WORKDIR $VERTICLE_HOME
 
-RUN tar -xvf todos.tar
+RUN tar -xvf todos-1.0-SNAPSHOT.tar
 
 ENTRYPOINT ["sh", "-c"]
-CMD ["./rest-mqtt-service/bin/todos verticles=8"]
+CMD ["./todos-1.0-SNAPSHOT/bin/todos verticles=8"]

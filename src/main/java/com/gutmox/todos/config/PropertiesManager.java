@@ -26,8 +26,13 @@ public final class PropertiesManager {
             properties = new Properties();
             properties.load(FileUtils.openInputStream(new File(RESOURCE_PATH + PROP_FILE_NAME)));
         } catch (IOException ioe) {
-            LOGGER.error("Error reading config properties: ", ioe);
-            throw new RuntimeException(ioe);
+            try {
+                properties.load(FileUtils.openInputStream(new File(PROP_FILE_NAME)));
+            } catch (IOException e) {
+
+                LOGGER.error("Error reading config properties: ", e);
+                throw new RuntimeException(e);
+            }
         }
     }
 

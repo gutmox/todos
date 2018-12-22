@@ -1,0 +1,24 @@
+image: openjdk:8-jdk
+stages:
+  - unit-tests
+  - integration-tests
+  - build
+
+before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - chmod +x ./gradlew
+
+unit-testing:
+  stage: unit-testing
+  script: ./gradlew clean test
+
+integration-testing:
+  stage: integration-testing
+  script: ./gradlew clean execMongo test stopMongo -Dtest.profile=integration
+
+build:
+  stage: build
+  script: ./gradlew clean build -x test
+  artifacts:
+    paths:
+      - build/distributions
