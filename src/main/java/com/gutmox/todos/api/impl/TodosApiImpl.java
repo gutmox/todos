@@ -23,13 +23,13 @@ public class TodosApiImpl implements TodosApi {
     }
 
     @Override
-    public Single<List<Todo>> getAll() {
-        return todoRepository.getAll().map(Todo::fromJson);
+    public Single<String> create(Todo todo) {
+        return todoValidations.validate(todo).flatMap(isValid -> todoRepository.save(todo.toJson()));
     }
 
     @Override
-    public Single<String> create(Todo todo) {
-        return todoValidations.validate(todo).flatMap(isValid -> todoRepository.save(todo.toJson()));
+    public Single<List<Todo>> getAll() {
+        return todoRepository.getAll().map(Todo::fromJson);
     }
 
     @Override

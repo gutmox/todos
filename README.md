@@ -44,20 +44,6 @@ Persistent RESTful API for a “TODO” application.
 |com.gutmox.todos.verticles | Vert.x verticles|
 |com.gutmox.todos.vertx.tools | a helper class to make easy run vert.x|
 
-## Example /todos POST Sequence
-
-```mermaid
-sequenceDiagram
-    participant App
-    participant Login
-    participant Todo
-    App->> Login: POST /auth/login {username:, password}
-    Login--> App: returns {jwt token}
-    App->> Todo: POST /todos {"title": "title", "description""description", "priority": 1}
-    Note right of Login: Passing as header \n Authorization = jwt token
-    Todo--> App: created item
-```
-
 ## Built With
 
 * [Java 8](http://www.oracle.com/technetwork/java/javase/10-relnote-issues-4108729.html) - Code language 
@@ -72,6 +58,20 @@ sequenceDiagram
 * [AssertJ](http://joel-costigliola.github.io/assertj/index.html) - adds fluent assertion support
 
 
+## Example /todos POST Sequence
+
+```mermaid
+sequenceDiagram
+    participant App
+    participant Login
+    participant Todo
+    App->> Login: POST /auth/login {username:, password}
+    Login--> App: returns {jwt token}
+    App->> Todo: POST /todos {"title": "title", "description""description", "priority": 1}
+    Note right of Login: Passing as header \n Authorization = jwt token
+    Todo--> App: created item
+```
+
 ## Running It manually
 
 ```
@@ -79,13 +79,75 @@ sequenceDiagram
 
 ```
 
-and from the IDE, run the main class:
+then, from the IDE, run the main class:
 
 ```
     com.gutmox.todos.Runner
 ```
 
 ## Running tests
+
+### Manual tests
+
+Follow next steps:
+
+* Create an user through the signup endpoint
+* Login with the previous obtained user, getting a JWT token to invoke the TODO API, which is passed as header. 
+* Create a todo item, getting that items' uuid   
+* Get a todo item   
+
+#### User Sign up
+
+```
+curl -X POST \
+  http://localhost:8080/auth/signup \
+  -H 'Content-Type: application/json' \
+  -H 'cache-control: no-cache' \
+  -d '{
+  "userName": "userName",
+  "password": "password"
+}'
+``` 
+
+#### User login to get a JWT Token
+```
+curl -X POST \
+  http://localhost:8080/auth/login \
+  -H 'Content-Type: application/json' \
+  -H 'cache-control: no-cache' \
+  -d '{
+  "userName": "userName",
+  "password": "password"
+}'
+```
+
+#### Creating a todo item 
+
+```
+curl -X POST \
+  http://localhost:8080/todos \
+  -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6InVzZXJOYW1lIiwiaWF0IjoxNTQ1MzgwMjc4LCJleHAiOjE1NDU1NTMwNzgsImF1ZCI6IlVzZXIiLCJpc3MiOiJIZXkgQ29ycC4ifQ.fjc3Q11u-pqwulzYaxYVj9Hc7O-eCOp28-UoGgkJ9y4' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "title": "title",
+  "description": "description",
+  "priority": 1
+}'
+```
+#### Getting a todo item 
+
+```
+curl -X GET \
+  http://localhost:8080/todos/5c1ca62c05c14f062d1f0780 \
+  -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6InVzZXJOYW1lIiwiaWF0IjoxNTQ1MzgwMjc4LCJleHAiOjE1NDU1NTMwNzgsImF1ZCI6IlVzZXIiLCJpc3MiOiJIZXkgQ29ycC4ifQ.fjc3Q11u-pqwulzYaxYVj9Hc7O-eCOp28-UoGgkJ9y4' \
+  -H 'Content-Type: application/json' \
+  -H 'cache-control: no-cache' \
+  -d '{
+  "title": "title5",
+  "description": "description5",
+  "priority": 5
+}'
+```
 
 ### Unit tests
     
