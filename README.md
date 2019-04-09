@@ -1,4 +1,4 @@
-# TODOs RESTful API
+# TODO RESTful API
 
 [![pipeline status](https://gitlab.com/gutmox/money-transfers/badges/master/pipeline.svg)](https://gitlab.com/gutmox/money-transfers/commits/master)
 
